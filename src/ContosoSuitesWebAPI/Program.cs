@@ -53,7 +53,7 @@ app.UseHttpsRedirection();
 
 /**** Endpoints ****/
 // This endpoint serves as the default landing page for the API.
-app.MapGet("/", async () => 
+app.MapGet("/", () => 
 {
     return "Welcome to the Contoso Suites Web API!";
 })
@@ -61,9 +61,11 @@ app.MapGet("/", async () =>
     .WithOpenApi();
 
 // Retrieve the set of hotels from the database.
+// Retrieve the set of hotels from the database.
 app.MapGet("/Hotels", async () => 
 {
-    throw new NotImplementedException();
+    var hotels = await app.Services.GetRequiredService<IDatabaseService>().GetHotels();
+    return hotels;
 })
     .WithName("GetHotels")
     .WithOpenApi();
@@ -71,7 +73,8 @@ app.MapGet("/Hotels", async () =>
 // Retrieve the bookings for a specific hotel.
 app.MapGet("/Hotels/{hotelId}/Bookings/", async (int hotelId) => 
 {
-    throw new NotImplementedException();
+    var bookings = await app.Services.GetRequiredService<IDatabaseService>().GetBookingsForHotel(hotelId);
+    return bookings;
 })
     .WithName("GetBookingsForHotel")
     .WithOpenApi();
@@ -79,7 +82,8 @@ app.MapGet("/Hotels/{hotelId}/Bookings/", async (int hotelId) =>
 // Retrieve the bookings for a specific hotel that are after a specified date.
 app.MapGet("/Hotels/{hotelId}/Bookings/{min_date}", async (int hotelId, DateTime min_date) => 
 {
-    throw new NotImplementedException();
+    var bookings = await app.Services.GetRequiredService<IDatabaseService>().GetBookingsByHotelAndMinimumDate(hotelId, min_date);
+    return bookings;
 })
     .WithName("GetRecentBookingsForHotel")
     .WithOpenApi();
@@ -108,6 +112,7 @@ app.MapGet("/Vectorize", async (string text, [FromServices] IVectorizationServic
 app.MapPost("/VectorSearch", async ([FromBody] float[] queryVector, [FromServices] IVectorizationService vectorizationService, int max_results = 0, double minimum_similarity_score = 0.8) =>
 {
     // Exercise 3 Task 3 TODO #3: Insert code to call the ExecuteVectorSearch function on the Vectorization Service. Don't forget to remove the NotImplementedException.
+    await Task.CompletedTask;
     throw new NotImplementedException();
 })
     .WithName("VectorSearch")
@@ -117,6 +122,7 @@ app.MapPost("/VectorSearch", async ([FromBody] float[] queryVector, [FromService
 app.MapPost("/MaintenanceCopilotChat", async ([FromBody]string message, [FromServices] MaintenanceCopilot copilot) =>
 {
     // Exercise 5 Task 2 TODO #10: Insert code to call the Chat function on the MaintenanceCopilot. Don't forget to remove the NotImplementedException.
+    await Task.CompletedTask;
     throw new NotImplementedException();
 })
     .WithName("Copilot")
